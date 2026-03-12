@@ -10,6 +10,8 @@ export default function OGGenerator() {
 
   const handleFileUpload = (e: any) => {
     const file = e.target.files[0];
+    if (!file) return;
+
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
@@ -23,49 +25,91 @@ export default function OGGenerator() {
     setLoading(true);
     const zip = new JSZip();
     
-    for (let i = 0; i < posts.length; i++) {
-      const post = posts[i];
-      const params = new URLSearchParams({
-        title: post.title || 'Untitled',
-        category: post.category || 'General',
-        author: post.author || 'Hardal'
-      });
-      
-      const response = await fetch(`/api/og?${params.toString()}`);
-      const blob = await response.blob();
-      zip.file(`post-${i + 1}.png`, blob);
-    }
+    try {
+      for (let i = 0; i < posts.length; i++) {
+        const post = posts[i];
+        const query = new URLSearchParams({
+          title: post.title || 'No Title',
+          category: post.category || 'General',
+          author: post.author || 'Hardal'
+        }).toString();
+        
+        const response = await fetch(`/api/og?${query}`);
+        if (response.ok) {
+          const blob = await response.blob();
+          zip.file(`hardal-og-${i + 1}.png`, blob);
+        }
+      }
 
-    const content = await zip.generateAsync({ type: 'blob' });
-    saveAs(content, 'hardal-og-images.zip');
+      const content = await zip.generateAsync({ type: 'blob' });
+      saveAs(content, 'hardal-og-export.zip');
+    } catch (error) {
+      console.error("Download failed:", error);
+      alert("Something went wrong during the ZIP generation.");
+    }
     setLoading(false);
   };
 
   return (
-    <div style={{ padding: '40px', fontFamily: 'sans-serif' }}>
-      <h1>Hardal OG Image Generator</h1>
-      <input type="file" accept=".csv" onChange={handleFileUpload} style={{ marginBottom: '20px' }} />
-      
-      {posts.length > 0 && (
-        <button 
-          onClick={downloadAll} 
-          disabled={loading}
-          style={{ marginLeft: '10px', padding: '10px 20px', cursor: 'pointer' }}
-        >
-          {loading ? 'Generating ZIP...' : `Download ${posts.length} Images`}
-        </button>
-      )}
+    <div style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto', fontFamily: 'sans-serif' }}>
+      <header style={{ marginBottom: '40px', borderBottom: '2px solid #eee', paddingBottom: '20px' }}>
+        <h1 style={{ fontSize: '32px', fontWeight: '800' }}>Hardal OG Automation</h1>
+        <p style={{ color: '#666' }}>Upload CSV to generate branded social images in bulk.</p>
+      </header>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', marginTop: '40px' }}>
-        {posts.map((post, index) => (
-          <div key={index} style={{ border: '1px solid #ddd', padding: '10px' }}>
-            <img 
-              src={`/api/og?title=${encodeURIComponent(post.title || '')}&category=${encodeURIComponent(post.category || '')}&author=${encodeURIComponent(post.author || '')}`} 
-              alt="Preview" 
-              style={{ width: '100%' }}
-            />
-          </div>
-        ))}
+      <div style={{ backgroundColor: '#f9f9f9', padding: '30px', borderRadius: '12px', marginBottom: '40px' }}>
+        <input 
+          type="file" 
+          accept=".csv" 
+          onChange={handleFileUpload} 
+          style={{ fontSize: '16px' }} 
+        />
+        
+        {posts.length > 0 && (
+          <button 
+            onClick={downloadAll} 
+            disabled={loading}
+            style={{ 
+              marginLeft: '20px', 
+              padding: '12px 24px', 
+              backgroundColor: '#000', 
+              color: '#fff', 
+              border: 'none', 
+              borderRadius: '8px', 
+              cursor: 'pointer',
+              fontWeight: 'bold'
+            }}
+          >
+            {loading ? 'Generating ZIP...' : `Download ${posts.length} Images (.ZIP)`}
+          </button>
+        )}
+      </div>
+
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', 
+        gap: '25px' 
+      }}>
+        {posts.map((post, index) => {
+          const query = new URLSearchParams({
+            title: post.title || '',
+            category: post.category || '',
+            author: post.author || ''
+          }).toString();
+
+          return (
+            <div key={index} style={{ border: '1px solid #eee', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#fff', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
+              <img 
+                src={`/api/og?${query}`} 
+                alt="Preview" 
+                style={{ width: '100%', height: 'auto', display: 'block', backgroundColor: '#f0f0f0' }}
+              />
+              <div style={{ padding: '15px' }}>
+                <code style={{ fontSize: '11px', color: '#999' }}>ID: {index + 1} | {post.title}</code>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
