@@ -5,7 +5,7 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
 export default function HardalDashboard() {
-  const [posts, setPosts] = useState([{ title: 'Example Post', category: 'Tech', author: 'Hardal' }]);
+  const [posts, setPosts] = useState<any[]>([]);
   
   // Handle CSV Upload
   const handleFileUpload = (e: any) => {
