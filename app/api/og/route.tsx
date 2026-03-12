@@ -4,16 +4,15 @@ export const runtime = 'edge';
 
 export async function GET(request: Request) {
   try {
-    const { searchParams } = new URL(request.url);
+    const { searchParams, origin } = new URL(request.url);
     
     const title = searchParams.get('title') || 'Social Media Automation';
     const category = searchParams.get('category') || 'Hardal Case Study';
     const author = searchParams.get('author') || 'Utku Demirhan';
 
-    // Using a more reliable way to get the base URL
-    const host = request.headers.get('host');
-    const protocol = host?.includes('localhost') ? 'http' : 'https';
-    const logoUrl = `${protocol}://${host}/hardal-logo.png`;
+    // We use the absolute URL. 
+    // IMPORTANT: Adding a cache-buster (?v=1) helps Vercel's edge network find it fresh.
+    const logoUrl = `${origin}/hardal-logo.png?v=1`;
 
     return new ImageResponse(
       (
@@ -22,8 +21,16 @@ export async function GET(request: Request) {
             backgroundColor: '#000', padding: '80px', color: 'white',
         }}>
           {/* LOGO CONTAINER */}
-          <div style={{ display: 'flex', backgroundColor: '#fff', padding: '15px 25px', borderRadius: '12px', width: 'fit-content', marginBottom: '40px' }}>
-            {/* We add an alt and a style to ensure it doesn't collapse if missing */}
+          <div style={{ 
+            display: 'flex', 
+            backgroundColor: '#fff', 
+            padding: '15px 25px', 
+            borderRadius: '12px', 
+            width: 'fit-content', 
+            marginBottom: '40px',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
             <img 
               src={logoUrl} 
               width="180" 
@@ -51,6 +58,6 @@ export async function GET(request: Request) {
       { width: 1200, height: 630 }
     );
   } catch (e) {
-    return new Response(`Error rendering image`, { status: 500 });
+    return new Response(`Error: ${e}`, { status: 500 });
   }
 }
