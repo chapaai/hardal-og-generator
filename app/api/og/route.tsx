@@ -4,53 +4,84 @@ export const runtime = 'edge';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const title = searchParams.get('title') || 'Default Title';
-  const category = searchParams.get('category') || 'HARDAL CASE';
-  const author = searchParams.get('author') || 'Team Hardal';
+  
+  // Get data from URL or use defaults
+  const title = searchParams.get('title') || 'Automating Image Generation';
+  const category = searchParams.get('category') || 'Hardal Case Study';
+  const author = searchParams.get('author') || 'Utku Demirhan';
+
+  // Your Base64 Logo String
+  const logoData = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDgwMCA2MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMjE5LjE5NCAyNjkuOTkzQzIyMS4xMjUgMjY4LjA1NyAyMjQuMjkxIDI2OC4wNTYgMjI2LjIyMSAyNjkuOTkzTDIyNi4yNTkgMjY5Ljk1NkMyMzUuOTQ4IDI3OS43MjUgMjM1Ljk0OCAyOTUuNTQzIDIyNi4yNTkgMzA1LjI3M0wxNzcuMDMzIDM1NC43MDNDMTY3LjMwNSAzNjQuNDMzIDE1MS41NTIgMzY0LjQzMiAxNDEuODYyIDM1NC43MDNDMTM5LjkzMSAzNTIuNzY1IDEzOS45MzIgMzQ5LjU4NCAxNDEuODYyIDM0Ny42NDVMMjE5LjE5NCAyNjkuOTkzWiIgZmlsbD0iIzE0MTAyMCIvPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTU4NC4yMjggMzQ5Ljc1N0g1NjQuNzcyVjM0Mi4yNDFDNTYwLjMzMyAzNDcuNjY2IDU1My41IDM1MS4zMDggNTQ0LjM1MiAzNTEuMzA4QzUyNC4wNDcgMzUxLjMwOCA1MTIuNTQ2IDMzNC4wMjQgNTEyLjU0NiAzMTMuMDk5QzUxMi41NDYgMjkyLjMzIDUyNC4wODYgMjc1LjAwOCA1NDQuMzUyIDI3NS4wMDdDNTUzLjUzOCAyNzUuMDA3IDU2MC4zMzMgMjc4LjY1IDU2NC43NzIgMjgzLjkxOVYyNDkuNjI3SDU4NC4yMjhWMzQ5Ljc1N1pNNTQ4Ljc5MiAyOTEuNzQ5QzUzNy45NDUgMjkxLjc0OSA1MzIuMTE1IDMwMC41NDQgNTMyLjExNSAzMTMuMDk5QzUzMi4xMTUgMzI1LjY1NCA1MzcuOTQ1IDMzNC40NSA1NDguNzkyIDMzNC40NUM1NTguMDk1IDMzNC40NDkgNTY1LjA0NCAzMjcuNjMgNTY1LjA0NCAzMTUuMTkyVjMxMS4xNjJDNTY1LjA0NCAyOTguNjA3IDU1OC4wOTUgMjkxLjc4NyA1NDguNzkyIDI5MS43ODdWMjkxLjc0OVoiIGZpbGw9IiMxNDEwMjAiLz4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik00MjMuNjgxIDI3NS4wMDdDNDQyLjE3MiAyNzUuMDA3IDQ1My4yODkgMjgzLjUzMiA0NTMuMjg5IDMwMC41NDNWMzMwLjUzN0M0NTMuMjg5IDMzNC40NSA0NTQuOTUgMzM1LjY4OCA0NTkuMzg5IDMzNS4xNDZWMzQ5Ljc1NUMSNDQ2LjggyIDM1MS42MTYgNDM5LjM5MyAzNDkuMDk4IDQzNi4xODkgMzQyLjk3NUM0MzEuNDggMzQ4LjEyOSA0MjQuMTA3IDM1MS4wNzQgNDE0LjQ5NSAzNTEuMDc0QzQwMC4xNzMgMzUxLjA3NCAzODkuNjM3IDM0Mi40MzIgMzg5LjYzNyAzMjkuNDUxTDM4OS42NzQgMzI5LjQxM0MzODkuNjc0IDMxNC43NjUgNDAxLjMzMiAzMDguNjQ0IDQxNi4wNzggMzA1Ljk3TDQzNC4yOTcgMzAyLjQ4MVYzMDEuMzU3QzQzNC4yOTcgMjk1LjA4IDQzMS4wOTMgMjkxLjE2NiA0MjMuMDI1IDI5MS4xNjZDNDE1LjgwNyAyOTExNjYgNDEyLjA2MSAyOTQuMzg0IDQxMC4zNjMgMzAwLjkzM0wzOTEuODcyIDI5Ny41OTlDMzk1LjE5MiAyODUuMDQ0IDQwNi4zMTEgMjc1LjAwOCA0MjMuNjgxIDI3NS4wMDdaTTQxOS45NzYgMzE5LjEwNEM0MTMuNTY4IDMyMC4zNDUgNDA4Ljg1OSAzMjIuNDM4IDQwOC44NTkgMzI4LjMyN0M0MDguODU5IDMzMy4zNjQgNDEyLjYwNSAzMzYuMjcwIDQxOC40MzQgMzM2LjI3MEM0MjYuNjE3IDMzNi4yNjkgNDM0LjI1OSAzMzEuOTMxIDQzNC4yNTkgMzIzLjcxOFYzMTYuMTk4TDQzNC4yOTcgMzE2LjE2MUw0MTkuOTc2IDMxOS4xMDVaIiBmaWxsPSIjMTQxMDIwIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNjI2LjU3OCAyNzUuMDA3QzY0NS4wNjcgMjc1LjAwOCA2NTYuMTg1IDI4My41MzMgNjU2LjE4NSAzMDAuNTQzVjMzMC41MzdDNjU2LjE4NSAzMzQuNDUgNjU3Ljg0NiAzMzUuNjg4IDY2Mi4yODUgMzM1LjE0NlWMzQ5Ljc5NUM2NDkuNzc4IDM1MS42MTYgNjQyLjI4NiAzNDkuMDk4IDYzOS4wODIgMzQyLjk3NUM2MzQuMzczIDM0OC4xMjggNjI3LjAwMSAzNTEuMDczIDYxNy4zOTEgMzUxLjA3NEM2MDMuMDY5IDM1MS4wNzQgNTkyLjUyOSAzNDIuNDMyIDU5Mi41MjkgMzI5LjQ1MUw1OTIuNTY3IDMyOS40MTNDNTkyLjU2NyAzMTQuNzY2IDYwNC4yMjUgMzA4LjY0NCA2MTguOTcgMzA1Ljk3TDYzNy4xOTMgMzAyLjQ4MVYzMDEuMzU3QzYzNy4xOTMgMjk1LjA4IDYzMy45ODggMjkxLjE2NiA2MjUuOTIyIDI5MS4xNjZDNjE4LjcwMyAyOTEuMTY2IDYxNC45NTcgMjk0LjM4NCA2MTMuMjU5IDMwMC45MzNMNTk0Ljc2OCAyOTcuNTk5QzU5OC4wODggMjg1LjA0NCA2MDkuMjA2IDI3NS4wMDcgNjI2LjU3OCAyNzUuMDA3Wk02MjIuODcyIDMxOS4xMDVDNjE2LjQ2NCAzMjAuMzQ1IDYxMS43NTUgMzIyLjQzOCA2MTEuNzU1IDMyOC4zMjdDNjExLjc1NSAzMzMuMzY0IDYxNS40OTcgMzM2LjI3IDYyMS4zMjYgMzM2LjI3QzYyOS41MSAzMzYuMjcgNjM3LjE1MSAzMzEuOTMyIDYzNy4xNTIgMzIzLjcxOFYzMTYuMTk4TDYzNy4xOTMgMzE2LjE2MUw2MjIuODcyIDMxOS4xMDVaIiBmaWxsPSIjMTQxMDIwIi8+CjxwYXRoIGQ9Ik0zMTUuODY2IDI4OS41MDFIMzYwLjA2N1YyNDkuNjI3SDM4MC40ODdWMzQ5Ljc1N0gzNjAuMDY3VjMwNy4yMTFIMzE1Ljg2NlYzNDkuNzU3SDI5NS4yOTFWMjQ5LjYyN0gzMTUuODY2VjI4OS41MDFaIiBmaWxsPSIjMTQxMDIwIi8+CjxwYXRoIGQ9Ik01MDYuNTYgMjc1Ljk3NkM1MDguNDkgMjc1Ljk3NiA1MDkuODgyIDI3Ni4xMzIgNTExLjI3MiAyNzYuMjQ5VjI5NS4zNTFDNTA5LjAzMyAyOTUuMDggNTA3LjM3MiAyOTQuOTI0IDUwNS4wMTggMjk0LjkyNEM0OTQuODY2IDI5NC45MjQgNDg3LjEwNCAzMDEuMjAyIDQ4Ny4xMDQgMzEyLjUxNlYzNDkuNzU3SDQ2Ny42NTJWMjc2LjQwNEg0ODcuMTA0VjI4Ni43MDhDNDkwLjMwOCAyODAuMjc2IDQ5Ny41MjggMjc1Ljk3NyA1MDYuNTYgMjc1Ljk3NloiIGZpbGw9IiMxNDEwMjAiLz4KPHBhdGggZD0iTTY5MCAzNDkuNzU3SDY3MC41NDRWMjQ5LjYyN0g2OTBWMzQ5Ljc1N1oiIGZpbGw9IiMxNDEwMjAiLz4KPHBhdGggZD0iTTE2Ni40NTIgMjQ1LjI5OEMxNzYuMTgxIDIzNS41NjggMTkxLjkzNyAyMzUuNTY3IDIwMS42MjcgMjQ1LjI5OEMyMDMuNTU3IDI0Ny4yMzYgMjAzLjU1NyAyNTAuNDE3IDIwMS42MjcgMjUyLjM1NUwxMjQuMjk0IDMzMC4wMDdDMTIyLjM2NCAzMzEuOTQ1IDExOS4xOTggMzMxLjk0NSAxMTcuMjY4IDMzMC4wMDdDMTA3LjU3NyAzMjAuMjM4IDEwNy41NzggMzA0LjQyIDExNy4yNjggMjk0LjY4OUwxNjYuNDUyIDI0NS4yOThaIiBmaWxsPSIjMTQxMDIwIi8+Cjwvc3ZnPgo=";
 
   return new ImageResponse(
     (
-      <div
-        style={{
-          height: '100%', width: '100%', display: 'flex', flexDirection: 'column',
-          backgroundColor: '#000', // Hardal-style Dark Background
-          padding: '80px', color: 'white', fontFamily: 'sans-serif',
-        }}
-      >
-        <svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="800" height="600" fill="white"/>
-<path d="M219.194 269.993C221.125 268.057 224.291 268.056 226.221 269.993L226.259 269.956C235.948 279.725 235.948 295.543 226.259 305.273L177.033 354.703C167.305 364.433 151.552 364.432 141.862 354.703C139.931 352.765 139.932 349.584 141.862 347.645L219.194 269.993Z" fill="#141020"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M584.228 349.757H564.772V342.241C560.333 347.666 553.5 351.308 544.352 351.308C524.047 351.308 512.546 334.024 512.546 313.099C512.546 292.33 524.086 275.008 544.352 275.007C553.538 275.007 560.333 278.65 564.772 283.919V249.627H584.228V349.757ZM548.792 291.749C537.945 291.749 532.115 300.544 532.115 313.099C532.115 325.654 537.945 334.45 548.792 334.45C558.095 334.449 565.044 327.63 565.044 315.192V311.162C565.044 298.607 558.095 291.787 548.792 291.787V291.749Z" fill="#141020"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M423.681 275.007C442.172 275.007 453.289 283.532 453.289 300.543V330.537C453.289 334.45 454.95 335.688 459.389 335.146V349.795C446.882 351.616 439.393 349.098 436.189 342.975C431.48 348.129 424.107 351.074 414.495 351.074C400.173 351.074 389.637 342.432 389.637 329.451L389.674 329.413C389.674 314.765 401.332 308.644 416.078 305.97L434.297 302.481V301.357C434.297 295.08 431.093 291.166 423.025 291.166C415.807 291.166 412.061 294.384 410.363 300.933L391.872 297.599C395.192 285.044 406.311 275.008 423.681 275.007ZM419.976 319.105C413.568 320.345 408.859 322.438 408.859 328.327C408.859 333.364 412.605 336.27 418.434 336.27C426.617 336.269 434.259 331.931 434.259 323.718V316.198L434.297 316.161L419.976 319.105Z" fill="#141020"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M626.578 275.007C645.067 275.008 656.185 283.533 656.185 300.543V330.537C656.185 334.45 657.846 335.688 662.285 335.146V349.795C649.778 351.616 642.286 349.098 639.082 342.975C634.373 348.128 627.001 351.073 617.391 351.074C603.069 351.074 592.529 342.432 592.529 329.451L592.567 329.413C592.567 314.766 604.225 308.644 618.97 305.97L637.193 302.481V301.357C637.193 295.08 633.988 291.166 625.922 291.166C618.703 291.166 614.957 294.384 613.259 300.933L594.768 297.599C598.088 285.044 609.206 275.007 626.578 275.007ZM622.872 319.105C616.464 320.345 611.755 322.438 611.755 328.327C611.755 333.364 615.497 336.27 621.326 336.27C629.51 336.27 637.151 331.932 637.152 323.718V316.198L637.193 316.161L622.872 319.105Z" fill="#141020"/>
-<path d="M315.866 289.501H360.067V249.627H380.487V349.757H360.067V307.211H315.866V349.757H295.291V249.627H315.866V289.501Z" fill="#141020"/>
-<path d="M506.56 275.976C508.49 275.976 509.882 276.132 511.272 276.249V295.351C509.033 295.08 507.372 294.924 505.018 294.924C494.866 294.924 487.104 301.202 487.104 312.516V349.757H467.652V276.404H487.104V286.708C490.308 280.276 497.528 275.977 506.56 275.976Z" fill="#141020"/>
-<path d="M690 349.757H670.544V249.627H690V349.757Z" fill="#141020"/>
-<path d="M166.452 245.298C176.181 235.568 191.937 235.567 201.627 245.298C203.557 247.236 203.557 250.417 201.627 252.355L124.294 330.007C122.364 331.945 119.198 331.945 117.268 330.007C107.577 320.238 107.578 304.42 117.268 294.689L166.452 245.298Z" fill="#141020"/>
-</svg>
-
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '40px' }}>
-          <div style={{ width: 40, height: 40, backgroundColor: '#FFD700', borderRadius: '8px', marginRight: '15px' }} />
-          <span style={{ fontSize: 28, fontWeight: 'bold', letterSpacing: '-1px' }}>HARDAL</span>
+      <div style={{
+          height: '100%',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          backgroundColor: '#000000', // Hardal Black
+          padding: '80px',
+          color: 'white',
+          fontFamily: 'sans-serif',
+      }}>
+        {/* LOGO SECTION */}
+        <div style={{ display: 'flex', marginBottom: '60px' }}>
+          <img 
+            src={logoData} 
+            width="220" 
+            height="80" 
+            style={{ objectFit: 'contain' }} 
+          />
         </div>
 
-        {/* CATEGORY (Accent color) */}
-        <div style={{ fontSize: 24, color: '#FFD700', textTransform: 'uppercase', marginBottom: '20px', letterSpacing: '2px' }}>
+        {/* DESIGN ACCENT (Mustard Gold) */}
+        <div style={{ 
+          width: '100px', 
+          height: '8px', 
+          backgroundColor: '#E1AD01', 
+          marginBottom: '40px' 
+        }} />
+
+        {/* CATEGORY */}
+        <div style={{ 
+          fontSize: 28, 
+          color: '#E1AD01', 
+          textTransform: 'uppercase', 
+          marginBottom: '20px', 
+          letterSpacing: '4px',
+          fontWeight: 'bold'
+        }}>
           {category}
         </div>
 
-        {/* MAIN TITLE (Huge and Bold) */}
-        <div style={{ fontSize: 72, fontWeight: 800, lineHeight: 1.1, marginBottom: 'auto' }}>
+        {/* TITLE */}
+        <div style={{ 
+          fontSize: 80, 
+          fontWeight: 900, 
+          lineHeight: 1.1, 
+          marginBottom: 'auto',
+          letterSpacing: '-2px'
+        }}>
           {title}
         </div>
 
-        {/* FOOTER (Author & Website) */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #333', paddingTop: '40px' }}>
-          <div style={{ fontSize: 32, fontWeight: 500 }}>{author}</div>
-          <div style={{ fontSize: 24, color: '#666' }}>hardal.com</div>
+        {/* FOOTER */}
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center',
+          borderTop: '2px solid #222', 
+          paddingTop: '40px' 
+        }}>
+          <div style={{ fontSize: 36, fontWeight: 500 }}>{author}</div>
+          <div style={{ fontSize: 28, color: '#E1AD01' }}>hardal.io</div>
         </div>
       </div>
     ),
-    { width: 1200, height: 630 }
+    {
+      width: 1200,
+      height: 630,
+    }
   );
 }
