@@ -4,39 +4,40 @@ export const runtime = 'edge';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const title = searchParams.get('title') || 'No Title Provided';
-  const category = searchParams.get('category') || 'HARDAL';
+  
+  const title = searchParams.get('title') || 'Automating Social Media';
+  const category = searchParams.get('category') || 'Hardal Case Study';
   const author = searchParams.get('author') || 'Utku Demirhan';
+
+  // Your Base64 Logo String
+  const logoData = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDgwMCA2MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMjE5LjE5NCAyNjkuOTkzQzIyMS4xMjUgMjY4LjA1NyAyMjQuMjkxIDI2OC4wNTYgMjI2LjIyMSAyNjkuOTkzTDIyNi4yNTkgMjY5Ljk1NkMyMzUuOTQ4IDI3OS43MjUgMjM1Ljk0OCAyOTUuNTQzIDIyNi4yNTkgMzA1LjI3M0wxNzcuMDMzIDM1NC43MDNDMTY3LjMwNSAzNjQuNDMzIDE1MS41NTIgMzY0LjQzMiAxNDEuODYyIDM1NC43MDNDMTM5LjkzMSAzNTIuNzY1IDEzOS45MzIgMzQ5LjU4NCAxNDEuODYyIDM0Ny42NDVMMjE5LjE5NCAyNjkuOTkzWiIgZmlsbD0iIzE0MTAyMCIvPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTU4NC4yMjggMzQ5Ljc1N0g1NjQuNzcyVjM0Mi4yNDFDNTYwLjMzMyAzNDcuNjY2IDU1My41IDM1MS4zMDggNTQ0LjM1MiAzNTEuMzA4QzUyNC4wNDcgMzUxLjMwOCA1MTIuNTQ2IDMzNC4wMjQgNTEyLjU0NiAzMTMuMDk5QzUxMi41NDYgMjkyLjMzIDUyNC4wODYgMjc1LjAwOCA1NDQuMzUyIDI3NS4wMDdDNTUzLjUzOCAyNzUuMDA3IDU2MC4zMzMgMjc4LjY1IDU2NC43NzIgMjgzLjkxOVYyNDkuNjI3SDU4NC4yMjhWMzQ5Ljc1N1pNNTQ4Ljc5MiAyOTEuNzQ5QzUzNy45NDUgMjkxLjc0OSA1MzIuMTE1IDMwMC41NDQgNTMyLjExNSAzMTMuMDk5QzUzMi4xMTUgMzI1LjY1NCA1MzcuOTQ1IDMzNC40NSA1NDguNzkyIDMzNC40NUM1NTguMDk1IDMzNC40NDkgNTY1LjA0NCAzMjcuNjMgNTY1LjA0NCAzMTUuMTkyVjMxMS4xNjJDNTY1LjA0NCAyOTguNjA3IDU1OC4wOTUgMjkxLjc4NyA1NDguNzkyIDI5MS43ODdWMjkxLjc0OVoiIGZpbGw9IiMxNDEwMjAiLz4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik00MjMuNjgxIDI3NS4wMDdDNDQyLjE3MiAyNzUuMDA3IDQ1My4yODkgMjgzLjUzMiA0NTMuMjg5IDMwMC41NDNWMzMwLjUzN0M0NTMuMjg5IDMzNC40NSA0NTQuOTUgMzM1LjY4OCA0NTkuMzg5IDMzNS4xNDZWMzQ5Ljc1NUMI0NDYuODgyIDM1MS42MTYgNDM5LjM5MyAzNDkuMDk4IDQzNi4xODkgMzQyLjk3NUM0MzEuNDggMzQ4LjEyOSA0MjQuMTA3IDM1MS4wNzQgNDE0LjQ5NSAzNTEuMDc0QzQwMC4xNzMgMzUxLjA3NCAzODkuNjM3IDM0Mi40MzIgMzg5LjYzNyAzMjkuNDUxTDM4OS42NzQgMzI5LjQxM0MzODkuNjc0IDMxNC43NjUgNDAxLjMzMiAzMDguNjQ0IDQxNi4wNzggMzA1Ljk3TDQzNC4yOTcgMzAyLjQ4MVYzMDEuMzU3QzQzNC4yOTcgMjk1LjA4IDQzMS4wOTMgMjkxLjE2NiA0MjMuMDI1IDI5MS4xNjZDNDE1LjgwNyAyOTExNjYgNDEyLjA2MSAyOTQuMzg0IDQxMC4zNjMgMzAwLjkzM0wzOTEuODcyIDI5Ny41OTlDMzk1LjE5MiAyODUuMDQ0IDQwNi4zMTEgMjc1LjAwOCA0MjMuNjgxIDI3NS4wMDdaTTQxOS45NzYgMzE5LjEwNEM0MTMuNTY4IDMyMC4zNDUgNDA4Ljg1OSAzMjIuNDM4IDQwOC44NTkgMzI4LjMyN0M0MDguODU5IDMzMy4zNjQgNDEyLjYwNSAzMzYuMjcwIDQxOC40MzQgMzM2LjI3MEM0MjYuNjE3IDMzNi4yNjkgNDM0LjI1OSAzMzEuOTMxIDQzNC4yNTkgMzIzLjcxOFYzMTYuMTk4TDQzNC4yOTcgMzE2LjE2MUw0MTkuOTc2IDMxOS4xMDVaIiBmaWxsPSIjMTQxMDIwIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNjI2LjU3OCAyNzUuMDA3QzY0NS4wNjcgMjkxLjE2NiA2NTYuMTg1IDI4My41MzMgNjU2LjE4NSAzMDAuNTQzVjMzMC41MzdDNjU2LjE4NSAzMzQuNDUgNjU3Ljg0NiAzMzUuNjg4IDY2Mi4yODUgMzM1LjE0NlWMzQ5Ljc1NUM2NDkuNzc4IDM1MS42MTYgNjQyLjI4NiAzNDkuMDk4IDYzOS4wODIgMzQyLjk3NUM2MzQuMzczIDM0OC4xMjggNjI3LjAwMSAzNTEuMDczIDYxNy4zOTEgMzUxLjA3NEM2MDMuMDY5IDM1MS4wNzQgNTkyLjUyOSAzNDIuNDMyIDU5Mi41MjkgMzI5LjQ1MUw1OTIuNTY3IDMyOS40MTNDNTkyLjU2NyAzMTQuNzY2IDYwNC4yMjUgMzA4LjY0NCA2MTguOTcgMzA1Ljk3TDYzNy4xOTMgMzAyLjQ4MVYzMDEuMzU3QzYzNy4xOTMgMjk1LjA4IDYzMy45ODggMjkxLjE2NiA2MjUuOTIyIDI5MS4xNjZDNjE4LjcwMyAyOTEuMTY2IDYxNC45NTcgMjk0LjM4NCA2MTMuMjU5IDMwMC45MzNMNTk0Ljc2OCAyOTcuNTk5QzU5OC4wODggMjg1LjA0NCA2MDkuMjA2IDI3NS4wMDcgNjI2LjU3OCAyNzUuMDA3Wk02MjIuODcyIDMxOS4xMDVDNjE2LjQ2NCAzMjAuMzQ1IDYxMS43NTUgMzIyLjQzOCA2MTEuNzU1IDMyOC4zMjdDNjExLjc1NSAzMzMuMzY0IDYxNS40OTcgMzM2LjI3IDYyMS4zMjYgMzM2LjI3QzYyOS41MSAzMzYuMjcgNjM3LjE1MSAzMzEuOTMyIDYzNy4xNTIgMzIzLjcxOFYzMTYuMTk4TDYzNy4xOTMgMzE2LjE2MUw2MjIuODcyIDMxOS4xMDVaIiBmaWxsPSIjMTQxMDIwIi8+CjxwYXRoIGQ9Ik0zMTUuODY2IDI4OS41MDFIMzYwLjA2N1YyNDkuNjI3SDM4MC40ODdWMzQ5Ljc1N0gzNjAuMDY3VjMwNy4yMTFIMzE1Ljg2NlYzNDkuNzU3SDI5NS4yOTFWMjQ5LjYyN0gzMTUuODY2VjI4OS41MDFaIiBmaWxsPSIjMTQxMDIwIi8+CjxwYXRoIGQ9Ik01MDYuNTYgMjc1Ljk3NkM1MDguNDkgMjc1Ljk3NiA1MDkuODgyIDI3Ni4xMzIgNTExLjI3MiAyNzYuMjQ5VjI5NS4zNTFDNTA5LjAzMyAyOTUuMDggNTA3LjM3MiAyOTQuOTI0IDUwNS4wMTggMjk0LjkyNEM0OTQuODY2IDI5NC45MjQgNDg3LjEwNCAzMDEuMjAyIDQ4Ny4xMDQgMzEyLjUxNlYzNDkuNzU3SDQ2Ny42NTJWMjc2LjQwNEg0ODcuMTA0VjI4Ni43MDhDNDkwLjMwOCAyODAuMjc2IDQ5Ny41MjggMjc1LjAwNyA1MDYuNTYgMjc1Ljk3NloiIGZpbGw9IiMxNDEwMjAiLz4KPHBhdGggZD0iTTY5MCAzNDkuNzU3SDY3MC41NDRWMjQ5LjYyN0g2OTBWMzQ5Ljc1N1oiIGZpbGw9IiMxNDEwMjAiLz4KPHBhdGggZD0iTTE2Ni40NTIgMjQ1LjI5OEMxNzYuMTgxIDIzNS41NjggMTkxLjkzNyAyMzUuNTY3IDIwMS42MjcgMjQ1LjI5OEMyMDMuNTU3IDI0Ny4yMzYgMjAzLjU1NyAyNTAuNDE3IDIwMS42MjcgMjUyLjM1NUwxMjQuMjk0IDMzMC4wMDdDMTIyLjM2NCAzMzEuOTQ1IDExOS4xOTggMzMxLjk0NSAxMTcuMjY4IDMzMC4wMDdDMTA3LjU3NyAzMjAuMjM4IDEwNy41NzggMzA0LjQyIDExNy4yNjggMjk0LjY4OUwxNjYuNDUyIDI0NS4yOThaIiBmaWxsPSIjMTQxMDIwIi8+Cjwvc3ZnPgo=";
 
   return new ImageResponse(
     (
       <div style={{
           height: '100%', width: '100%', display: 'flex', flexDirection: 'column',
-          backgroundColor: '#000000', padding: '60px', color: 'white',
-          border: '20px solid #E1AD01', // BRIGHT YELLOW BORDER (to see if it updated)
+          backgroundColor: '#000000', padding: '80px', color: 'white', fontFamily: 'sans-serif',
       }}>
-        {/* LOGO SECTION */}
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '40px' }}>
-          <div style={{ 
-            backgroundColor: '#E1AD01', padding: '10px 20px', borderRadius: '10px',
-            color: 'black', fontSize: '30px', fontWeight: 'bold' 
-          }}>
-            HARDAL
-          </div>
+        {/* LOGO BOX */}
+        <div style={{ display: 'flex', backgroundColor: '#fff', padding: '10px 20px', borderRadius: '12px', width: 'fit-content', marginBottom: '40px' }}>
+          <img src={logoData} width="180" height="60" style={{ objectFit: 'contain' }} />
         </div>
 
+        {/* ACCENT LINE */}
+        <div style={{ width: '80px', height: '6px', backgroundColor: '#E1AD01', marginBottom: '30px' }} />
+
         {/* CATEGORY */}
-        <div style={{ fontSize: 24, color: '#E1AD01', marginBottom: '10px', fontWeight: 'bold' }}>
+        <div style={{ fontSize: 24, color: '#E1AD01', textTransform: 'uppercase', marginBottom: '15px', fontWeight: 'bold', letterSpacing: '2px' }}>
           {category}
         </div>
 
-        {/* TITLE */}
-        <div style={{ fontSize: 70, fontWeight: 900, lineHeight: 1.1, marginBottom: 'auto' }}>
+        {/* MAIN TITLE */}
+        <div style={{ fontSize: 72, fontWeight: 900, lineHeight: 1.1, marginBottom: 'auto' }}>
           {title}
         </div>
 
         {/* FOOTER */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '2px solid #333', paddingTop: '30px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid #333', paddingTop: '40px' }}>
           <div style={{ fontSize: 32 }}>{author}</div>
           <div style={{ fontSize: 24, color: '#E1AD01' }}>hardal.io</div>
         </div>
