@@ -1,141 +1,104 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Papa from 'papaparse';
-import { Download, Upload, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { useState } from 'react';
+import JSZip from 'jszip';
 
-export default function OGGenerator() {
-  const [data, setData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
+interface Post {
+  title: string;
+  category: string;
+  author: string;
+}
+
+export default function HardalOGDashboard() {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [isZipping, setIsZipping] = useState(false);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
-    setLoading(true);
-    Papa.parse(file, {
-      header: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        setData(results.data);
-        setLoading(false);
-      },
-      error: () => {
-        alert("Error parsing CSV file.");
-        setLoading(false);
-      }
-    });
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target?.result as string;
+      const rows = text.split('\n').filter(row => row.trim() !== '').slice(1);
+      const parsed = rows.map(row => {
+        const parts = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+        return {
+          title: parts[0]?.replace(/"/g, '').trim() || 'Untitled',
+          category: parts[1]?.replace(/"/g, '').trim() || 'Developer Guide',
+          author: parts[2]?.replace(/"/g, '').trim() || 'Hardal User'
+        };
+      });
+      setPosts(parsed);
+    };
+    reader.readAsText(file);
   };
 
-  const downloadAll = async () => {
-    setLoading(true);
-    // Logic for downloading images can be expanded here
-    // For now, we will notify the user
-    alert("Starting download for " + data.length + " images...");
-    
-    for (const item of data) {
-      const query = new URLSearchParams({
-        title: item.title || '',
-        category: item.category || '',
-        author: item.author || ''
-      }).toString();
-      
-      const link = document.createElement('a');
-      link.href = `/og?${query}`;
-      link.download = `${item.title || 'image'}.png`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      // Small delay to prevent browser browser freezing
-      await new Promise(r => setTimeout(r, 500));
+  const downloadAsZip = async () => {
+    if (posts.length === 0) return;
+    setIsZipping(true);
+    const zip = new JSZip();
+
+    for (let i = 0; i < posts.length; i++) {
+      const post = posts[i];
+      const url = `/api/og?title=${encodeURIComponent(post.title)}&category=${encodeURIComponent(post.category)}&author=${encodeURIComponent(post.author)}&i=${i}`;
+      try {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        zip.file(`Hardal_OG_${i+1}.png`, blob);
+      } catch (err) {
+        console.error(err);
+      }
     }
-    setLoading(false);
+
+    const content = await zip.generateAsync({ type: "blob" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(content);
+    link.download = "hardal_og_batch.zip";
+    link.click();
+    setIsZipping(false);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
-            Hardal OG Image Generator
-          </h1>
-          <p className="text-lg text-gray-600">
-            Upload your CSV and generate branded social media images instantly.
-          </p>
-        </div>
-
-        {/* Upload Section */}
-        <div className="bg-white rounded-xl shadow-md p-8 mb-8 border-2 border-dashed border-gray-300">
-          <div className="flex flex-col items-center">
-            <label className="flex flex-col items-center cursor-pointer">
-              <Upload className="h-12 w-12 text-blue-500 mb-2" />
-              <span className="text-gray-700 font-medium">Select CSV File</span>
-              <input 
-                type="file" 
-                accept=".csv" 
-                className="hidden" 
-                onChange={handleFileUpload} 
-              />
+    <div style={{ minHeight: '100vh', backgroundColor: '#ffffff', color: '#111', padding: '60px 20px', fontFamily: 'Inter, system-ui, sans-serif' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        
+        <div style={{ borderBottom: '1px solid #eaeaea', paddingBottom: '30px', marginBottom: '50px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          <div>
+            <h1 style={{ fontSize: '42px', fontWeight: '800', letterSpacing: '-0.02em', marginBottom: '8px' }}>Asset Studio</h1>
+            <p style={{ color: '#666', fontSize: '18px' }}>Bulk OG Generation - Case Study #5</p>
+          </div>
+          
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <label style={{ padding: '12px 24px', border: '1px solid #111', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '14px' }}>
+              Upload CSV
+              <input type="file" accept=".csv" onChange={handleFileUpload} style={{ display: 'none' }} />
             </label>
-            <p className="mt-2 text-sm text-gray-500">
-              CSV must have columns: **title, category, author**
-            </p>
+            {posts.length > 0 && (
+              <button 
+                onClick={downloadAsZip} 
+                disabled={isZipping}
+                style={{ backgroundColor: '#111', color: '#fff', padding: '12px 28px', borderRadius: '6px', cursor: 'pointer', border: 'none', fontWeight: '600', fontSize: '14px' }}
+              >
+                {isZipping ? 'Bundling...' : `Export ZIP (${posts.length})`}
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Controls */}
-        {data.length > 0 && (
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-gray-800">
-              Previewing {data.length} Images
-            </h2>
-            <button
-              onClick={downloadAll}
-              disabled={loading}
-              className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-lg disabled:opacity-50"
-            >
-              {loading ? <Loader2 className="animate-spin" /> : <Download size={20} />}
-              Download All Images
-            </button>
-          </div>
-        )}
-
-        {/* Preview Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {data.map((item, index) => {
-            const query = new URLSearchParams({
-              title: item.title || '',
-              category: item.category || '',
-              author: item.author || ''
-            }).toString();
-
-            return (
-              <div key={index} className="bg-white rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-[1.02]">
-                <div className="aspect-video bg-gray-200 relative">
-                  <img
-                    src={`/og?${query}`}
-                    alt={item.title}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="p-4 bg-white border-t">
-                  <p className="text-sm font-bold text-blue-600 uppercase mb-1">{item.category}</p>
-                  <p className="text-gray-900 font-medium truncate">{item.title}</p>
-                  <p className="text-xs text-gray-500 mt-2">By {item.author}</p>
-                </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))', gap: '40px' }}>
+          {posts.map((post, i) => (
+            <div key={i} style={{ border: '1px solid #f0f0f0', borderRadius: '16px', overflow: 'hidden' }}>
+              <img 
+                src={`/api/og?title=${encodeURIComponent(post.title)}&category=${encodeURIComponent(post.category)}&author=${encodeURIComponent(post.author)}&i=${i}`} 
+                style={{ width: '100%', height: 'auto', display: 'block' }} 
+              />
+              <div style={{ padding: '20px', backgroundColor: '#fafafa', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '14px', fontWeight: '600' }}>{post.title}</span>
+                <span style={{ fontSize: '12px', color: '#999' }}>{post.category}</span>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
-
-        {data.length === 0 && !loading && (
-          <div className="text-center py-20 bg-gray-100 rounded-xl">
-            <ImageIcon className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-500 text-xl">No data uploaded yet.</p>
-          </div>
-        )}
       </div>
     </div>
   );
