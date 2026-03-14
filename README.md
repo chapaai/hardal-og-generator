@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hardal OG Image Asset Studio
 
-## Getting Started
+A high-performance automated system for generating branded Open Graph (OG) images in bulk. Built for Case Study #5 to streamline the creation of social sharing assets for the Hardal blog ecosystem.
 
-First, run the development server:
+## 🚀 Live Demo
+- **URL:** [https://hardal-og-production.vercel.app/](https://hardal-og-production.vercel.app/)
+- **API Endpoint:** `/api/og`
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Features
+- **Bulk CSV Processing:** Upload a CSV and preview 1,000+ assets instantly.
+- **Hardal Branding:** Automated color cycling (gradients), category badges, and logo integration.
+- **ZIP Export:** Client-side bundling using `JSZip` to download all assets in a single click.
+- **Dynamic API:** RESTful endpoint for programmatic image generation.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠 Tech Stack
+- **Framework:** Next.js 14 (App Router)
+- **Image Generation:** `@vercel/og` (Satori engine)
+- **Deployment:** Vercel (Edge Runtime)
+- **Libraries:** `jszip` for bulk bundling.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🔌 API Integration Guide
+Developers can generate images on the fly by passing parameters to the `/api/og` endpoint.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Base URL:** `https://hardal-og-production.vercel.app/api/og`
 
-## Learn More
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `title` | string | The headline of the blog post |
+| `category` | string | The badge text (e.g., Developer Guide) |
+| `author` | string | The name of the author |
+| `i` | number | (Optional) Index to cycle background gradients |
 
-To learn more about Next.js, take a look at the following resources:
+**Example Request:**
+`https://hardal-og-production.vercel.app/api/og?title=How%20to%20Scale%20Data&category=Engineering&author=Hardal%20Team&i=2`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📦 Local Setup
+1. Clone the repo
+2. Run `npm install`
+3. Run `npm run dev`
+4. Place your logo in `/public/hardal-logo.png`
